@@ -4,33 +4,31 @@ import { US_STATES } from "./states";
 import useProfile from "./hooks/useProfile";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import CircularProgress from "@mui/material/CircularProgress";
 import Grid from "@mui/material/Grid";
 import invariant from "tiny-invariant";
 import MenuItem from "@mui/material/MenuItem";
 import React, { memo, useEffect, useState } from "react";
 import TextField from "@mui/material/TextField";
-import { useSession } from "@inrupt/solid-ui-react";
-import ProfileSelector from "./ProfileSelector";
 import { Link, Typography } from "@mui/material";
-import LoggedOutView from "./LoggedOutView";
 import NewProfileView from "./NewProfileView";
 import handleLogOut from "./utils/handleLogOut";
+import { useNavigate } from "react-router-dom";
 
 type Props = ReturnType<typeof useProfile>;
 
 const ProfileEditor = (props: Props) => {
   const {
     email,
-    loading,
     name,
     postalAddress,
-    profileUrls,
     selectedProfileUrl,
+    setSelectedProfileUrl,
   } = props;
 
-  const { session } = useSession();
+  const navigate = useNavigate();
+
   const [showSuccess, setShowSuccess] = useState(false);
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -75,27 +73,10 @@ const ProfileEditor = (props: Props) => {
     }
   }, [showSuccess]);
 
-  if (loading) {
-    return (
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <CircularProgress />
-      </Box>
-    );
-  }
-
-  if (!session.info.isLoggedIn) {
-    return <LoggedOutView />;
-  }
-
-  if (profileUrls && profileUrls.length > 1 && !selectedProfileUrl) {
-    return <ProfileSelector />;
-  }
+  const handleGoBackToProfileSelector = () => {
+    setSelectedProfileUrl("");
+    navigate("/profile-selector");
+  };
 
   return (
     <Box mt={2} display="flex" flexDirection="row">
@@ -207,6 +188,14 @@ const ProfileEditor = (props: Props) => {
             onClick={handleLogOut}
           >
             Log Out
+          </Button>
+          <Button
+            size="large"
+            variant="contained"
+            fullWidth
+            onClick={handleGoBackToProfileSelector}
+          >
+            Go to Profile Selector
           </Button>
         </Grid>
       </Grid>

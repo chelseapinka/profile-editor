@@ -8,11 +8,8 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Grid from "@mui/material/Grid";
 import invariant from "tiny-invariant";
 import MenuItem from "@mui/material/MenuItem";
-import React, { memo, useEffect, useState } from "react";
+import React, { memo } from "react";
 import TextField from "@mui/material/TextField";
-import { useSession } from "@inrupt/solid-ui-react";
-import { ILoginInputOptions } from "@inrupt/solid-client-authn-core";
-import ProfileSelector from "./ProfileSelector";
 
 type Props = ReturnType<typeof useProfile>;
 
@@ -22,12 +19,10 @@ const ProfileForm = (props: Props) => {
     loading,
     name,
     postalAddress,
-    profileUrls,
     selectedProfileUrl,
     setShowSuccess,
   } = props;
 
-  const { session } = useSession();
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);

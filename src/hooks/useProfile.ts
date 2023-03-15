@@ -68,7 +68,6 @@ function useProfile(): any {
     const profileThing = getThing(
       profileList[0],
       "https://storage.inrupt.com/d0f9cb3c-2187-4363-86f2-30944951f5ec/profile#homeAddress"
-      // { fetch: session.fetch }
     );
     const jsProfile = fromProfileThing(profileThing, profileList[0]);
 

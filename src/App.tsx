@@ -1,19 +1,28 @@
 import "./App.css";
-import { SessionProvider } from "@inrupt/solid-ui-react";
-import { theme } from "./theme";
-import { ThemeProvider } from "@mui/material/styles";
-import ProfileEditor from "./ProfileEditor";
+import { useSession } from "@inrupt/solid-ui-react";
+import { Navigate } from "react-router-dom";
+import useProfile from "./hooks/useProfile";
+import LoggedOutView from "./LoggedOutView";
 
 function App() {
-  return (
-    <div className="App">
-      <SessionProvider>
-        <ThemeProvider theme={theme}>
-          <ProfileEditor />
-        </ThemeProvider>
-      </SessionProvider>
-    </div>
-  );
+  const { session } = useSession();
+  const { profileUrls, selectedProfileUrl } = useProfile();
+
+  if (
+    session.info.isLoggedIn &&
+    profileUrls &&
+    profileUrls.length > 1 &&
+    !selectedProfileUrl
+  ) {
+    return <Navigate to="/profile-selector" replace={true} />;
+  }
+  if (
+    (session.info.isLoggedIn && profileUrls && profileUrls.length === 1) ||
+    (session.info.isLoggedIn && selectedProfileUrl)
+  ) {
+    return <Navigate to="/profile-editor" replace={true} />;
+  }
+  return <LoggedOutView />;
 }
 
 export default App;

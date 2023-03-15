@@ -5,9 +5,16 @@ import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 import NewProfileView from "./NewProfileView";
 import handleLogOut from "./utils/handleLogOut";
 import { Typography } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const ProfileSelector = () => {
   const { profileUrls, setSelectedProfileUrl } = useProfile();
+  const navigate = useNavigate();
+
+  const handleProfileSelect = (profile: string) => {
+    setSelectedProfileUrl(profile);
+    navigate("/profile-editor");
+  };
 
   return (
     <Box>
@@ -21,7 +28,7 @@ const ProfileSelector = () => {
                 size="large"
                 variant="contained"
                 fullWidth
-                onClick={() => setSelectedProfileUrl(profile)}
+                onClick={() => handleProfileSelect(profile)}
               >
                 {profile}
               </Button>

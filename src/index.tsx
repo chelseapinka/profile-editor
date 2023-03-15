@@ -1,15 +1,32 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+import { ThemeProvider } from "@mui/material/styles";
+import ProfileEditor from "./ProfileEditor";
+import { SessionProvider } from "@inrupt/solid-ui-react";
+import { theme } from "./theme";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import ProfileSelector from "./ProfileSelector";
 const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
+  document.getElementById("root") as HTMLElement
 );
+
 root.render(
   <React.StrictMode>
-    <App />
+    <SessionProvider>
+      <ThemeProvider theme={theme}>
+        <BrowserRouter>
+          <Routes>
+            <Route index element={<App />} />
+            <Route path="/profile-selector" element={<ProfileSelector />} />
+            <Route path="/profile-editor" element={<ProfileEditor />} />
+          </Routes>
+        </BrowserRouter>
+      </ThemeProvider>
+    </SessionProvider>
+    {/* <App /> */}
   </React.StrictMode>
 );
 
