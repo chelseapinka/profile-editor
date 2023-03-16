@@ -15,8 +15,8 @@ export type ProfileReturn = Partial<ReturnType<typeof fromProfileThing>> & {
   loading?: boolean;
   profileDatasets?: SolidDataset[];
   profileUrls?: string[];
-  selectedProfileUrl?: string;
-  setSelectedProfileUrl: Dispatch<SetStateAction<string | undefined>>;
+  selectedProfileUrl?: string | undefined;
+  setSelectedProfileUrl: Dispatch<SetStateAction<string>> | (() => void);
   storage?: string;
   webIdProfile?: SolidDataset;
 };
@@ -30,19 +30,18 @@ function useProfile(): any {
   const [profileList, setProfileList] = useState<SolidDataset[]>([]);
   const [profileUrlsList, setProfileUrlsList] = useState<string[]>([]);
   const [storage, setStorage] = useState<string[]>([]);
-  const [selectedProfileUrl, setSelectedProfileUrl] = useState<string>();
+  const [selectedProfileUrl, setSelectedProfileUrl] = useState<string>("");
 
   useEffect(() => {
     const gatherUserData = async () => {
-      if (session.info.webId) {
-        invariant(webId, "webId must be set to access profile data");
+      if (webId) {
         const storageUrls = await getPodUrlAll(webId);
         const profiles = await getProfileAll(webId);
         const profileUrls = await getAltProfileUrlAllFrom(
           webId,
           profiles.webIdProfile
         );
-
+        console.log("how often does useeffect run?", { profileUrls });
         setWebIdProfile(profiles.webIdProfile);
         setProfileList(profiles.altProfileAll);
         setProfileUrlsList(profileUrls);
@@ -67,8 +66,10 @@ function useProfile(): any {
     // TODO this is where the data comes from the profile to be populated in the form.
     const profileThing = getThing(
       profileList[0],
-      "https://storage.inrupt.com/d0f9cb3c-2187-4363-86f2-30944951f5ec/profile#homeAddress"
+      "https://storage.inrupt.com/d0f9cb3c-2187-4363-86f2-30944951f5ec/profile"
+      // "https://storage.inrupt.com/d0f9cb3c-2187-4363-86f2-30944951f5ec/profile#homeAddress"
     );
+    console.log("In the js mapper", { profileThing }, profileList[0]);
     const jsProfile = fromProfileThing(profileThing, profileList[0]);
 
     Object.assign(returnValue, jsProfile);
