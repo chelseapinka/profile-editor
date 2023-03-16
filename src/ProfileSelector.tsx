@@ -10,7 +10,7 @@ const ProfileSelector = () => {
   const { profileUrls, setSelectedProfileUrl, selectedProfileUrl } =
     useProfile();
   const navigate = useNavigate();
-  console.log({ selectedProfileUrl });
+
   const handleProfileSelect = (profile: string) => {
     setSelectedProfileUrl(profile);
     navigate("/profile-editor");

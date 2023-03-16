@@ -41,7 +41,7 @@ function useProfile(): any {
           webId,
           profiles.webIdProfile
         );
-        console.log("how often does useeffect run?", { profileUrls });
+
         setWebIdProfile(profiles.webIdProfile);
         setProfileList(profiles.altProfileAll);
         setProfileUrlsList(profileUrls);
