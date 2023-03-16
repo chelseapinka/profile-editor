@@ -63,13 +63,7 @@ function useProfile(): any {
   };
 
   if (profileList[0]) {
-    // TODO this is where the data comes from the profile to be populated in the form.
-    const profileThing = getThing(
-      profileList[0],
-      "https://storage.inrupt.com/d0f9cb3c-2187-4363-86f2-30944951f5ec/profile"
-      // "https://storage.inrupt.com/d0f9cb3c-2187-4363-86f2-30944951f5ec/profile#homeAddress"
-    );
-    console.log("In the js mapper", { profileThing }, profileList[0]);
+    const profileThing = getThing(profileList[0], selectedProfileUrl);
     const jsProfile = fromProfileThing(profileThing, profileList[0]);
 
     Object.assign(returnValue, jsProfile);

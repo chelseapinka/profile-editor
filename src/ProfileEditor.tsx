@@ -50,16 +50,15 @@ const ProfileEditor = (props: Props) => {
     });
 
     try {
-      // invariant(
-      //   selectedProfileUrl,
-      //   "selectedProfileUrl must be set to save a profile"
-      // );
+      invariant(
+        selectedProfileUrl,
+        "selectedProfileUrl must be set to save a profile"
+      );
 
       const newProfile = {
         ...formValues,
         postalAddress: nextPostalAddress,
-        // TODO this shouldn't be hardcoded
-        url: "https://storage.inrupt.com/d0f9cb3c-2187-4363-86f2-30944951f5ec/profile",
+        url: selectedProfileUrl,
       };
 
       // @ts-ignore -- TypeScript doesn't know that postalAddress will have a url on it.
