@@ -9,14 +9,18 @@ import invariant from "tiny-invariant";
 import MenuItem from "@mui/material/MenuItem";
 import React, { memo, useEffect, useState } from "react";
 import TextField from "@mui/material/TextField";
-import { Link, Typography } from "@mui/material";
+import { Divider, Link, Typography } from "@mui/material";
 import NewProfileView from "./NewProfileView";
-import handleLogOut from "./utils/handleLogOut";
 import { useNavigate } from "react-router-dom";
+import { useSession } from "@inrupt/solid-ui-react";
+import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 
 type Props = ReturnType<typeof useProfile>;
 
 const ProfileEditor = (props: Props) => {
+  const { session } = useSession();
+  const navigate = useNavigate();
+
   const {
     email,
     name,
@@ -24,8 +28,6 @@ const ProfileEditor = (props: Props) => {
     selectedProfileUrl,
     setSelectedProfileUrl,
   } = props;
-
-  const navigate = useNavigate();
 
   const [showSuccess, setShowSuccess] = useState(false);
 
@@ -48,15 +50,16 @@ const ProfileEditor = (props: Props) => {
     });
 
     try {
-      invariant(
-        selectedProfileUrl,
-        "selectedProfileUrl must be set to save a profile"
-      );
+      // invariant(
+      //   selectedProfileUrl,
+      //   "selectedProfileUrl must be set to save a profile"
+      // );
 
       const newProfile = {
         ...formValues,
         postalAddress: nextPostalAddress,
-        url: selectedProfileUrl,
+        // TODO this shouldn't be hardcoded
+        url: "https://storage.inrupt.com/d0f9cb3c-2187-4363-86f2-30944951f5ec/profile",
       };
 
       // @ts-ignore -- TypeScript doesn't know that postalAddress will have a url on it.
@@ -79,129 +82,152 @@ const ProfileEditor = (props: Props) => {
   };
 
   return (
-    <Box mt={2} display="flex" flexDirection="row">
-      <Grid container spacing={3} component="form" onSubmit={handleSubmit}>
-        <Grid item xs={12} sm={12}>
-          <TextField
-            required
-            variant="filled"
-            defaultValue={name}
-            autoComplete="name"
-            name="name"
-            fullWidth
-            label="Name"
+    <Box justifyContent="center" display="flex">
+      <Grid2
+        container
+        spacing={3}
+        component="form"
+        onSubmit={handleSubmit}
+        flexDirection="row"
+      >
+        <Grid2 className="Form Grid">
+          {/* <Grid2 container> */}
+          <Grid2>
+            <TextField
+              required
+              variant="filled"
+              defaultValue={name}
+              autoComplete="name"
+              name="name"
+              fullWidth
+              label="Name"
+            />
+          </Grid2>
+          <Grid2 xs={12}>
+            <TextField
+              required
+              fullWidth
+              variant="filled"
+              defaultValue={email}
+              label="Email"
+              name="email"
+              type="email"
+              autoComplete="email"
+            />
+          </Grid2>
+          <input
+            type="hidden"
+            name="postalAddress.url"
+            value={postalAddress?.url}
           />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            required
-            fullWidth
-            variant="filled"
-            defaultValue={email}
-            label="Email"
-            name="email"
-            type="email"
-            autoComplete="email"
-          />
-        </Grid>
-        <input
-          type="hidden"
-          name="postalAddress.url"
-          value={postalAddress?.url}
-        />
-        <Grid item xs={12} sm={12}>
-          <TextField
-            variant="filled"
-            defaultValue={postalAddress?.address}
-            autoComplete="street-address"
-            name="postalAddress.address"
-            multiline
-            required
-            rows={3}
-            fullWidth
-            label="Address"
-          />
-        </Grid>
-        <Grid item xs={8} sm={8}>
-          <TextField
-            variant="filled"
-            defaultValue={postalAddress?.city}
-            autoComplete="address-level2"
-            name="postalAddress.city"
-            required
-            fullWidth
-            label="City"
-          />
-        </Grid>
-        <Grid item xs={4} sm={4}>
-          <TextField
-            variant="filled"
-            defaultValue={postalAddress?.state || ""}
-            autoComplete="address-level2"
-            name="postalAddress.state"
-            fullWidth
-            label="State"
-            required
-            select
-          >
-            {US_STATES.map((state: string) => (
-              <MenuItem key={state} value={state}>
-                {state}
-              </MenuItem>
-            ))}
-          </TextField>
-        </Grid>
-        <Grid item xs={12} sm={12}>
-          <TextField
-            variant="filled"
-            defaultValue={postalAddress?.zipcode}
-            autoComplete="postal-code"
-            name="postalAddress.zipcode"
-            inputProps={{
-              inputMode: "numeric",
-              pattern: "[0-9]{5}-?([0-9]{4})?",
-              title: "5 or 9 digit zip code",
-            }}
-            required
-            fullWidth
-            label="Zip"
-          />
-        </Grid>
-        <Grid item xs={12} sm={12}>
-          <Button size="large" variant="contained" fullWidth type="submit">
-            Save
-          </Button>
-          {showSuccess && (
-            <Typography>Profile updated successfully!</Typography>
-          )}
-          <Link
-            rel="noopener noreferrer"
-            href={selectedProfileUrl}
-            target="_blank"
-          >
-            "View your profile here"
-          </Link>
-          <Button
-            size="large"
-            variant="contained"
-            fullWidth
-            onClick={handleLogOut}
-          >
-            Log Out
-          </Button>
-          <Button
-            size="large"
-            variant="contained"
-            fullWidth
-            onClick={handleGoBackToProfileSelector}
-          >
-            Go to Profile Selector
-          </Button>
-        </Grid>
-      </Grid>
-      <Grid container spacing={3}>
-        <NewProfileView />
-      </Grid>
+          <Grid2 xs={12} sm={12}>
+            <TextField
+              variant="filled"
+              defaultValue={postalAddress?.address}
+              autoComplete="street-address"
+              name="postalAddress.address"
+              multiline
+              required
+              rows={3}
+              fullWidth
+              label="Address"
+            />
+          </Grid2>
+          <Grid2 xs={8} sm={8}>
+            <TextField
+              variant="filled"
+              defaultValue={postalAddress?.city}
+              autoComplete="address-level2"
+              name="postalAddress.city"
+              required
+              fullWidth
+              label="City"
+            />
+          </Grid2>
+          <Grid2 xs={4} sm={4}>
+            <TextField
+              variant="filled"
+              defaultValue={postalAddress?.state || ""}
+              autoComplete="address-level2"
+              name="postalAddress.state"
+              fullWidth
+              label="State"
+              required
+              select
+            >
+              {US_STATES.map((state: string) => (
+                <MenuItem key={state} value={state}>
+                  {state}
+                </MenuItem>
+              ))}
+            </TextField>
+          </Grid2>
+          <Grid2 xs={12} sm={12}>
+            <TextField
+              variant="filled"
+              defaultValue={postalAddress?.zipcode}
+              autoComplete="postal-code"
+              name="postalAddress.zipcode"
+              inputProps={{
+                inputMode: "numeric",
+                pattern: "[0-9]{5}-?([0-9]{4})?",
+                title: "5 or 9 digit zip code",
+              }}
+              required
+              fullWidth
+              label="Zip"
+            />
+          </Grid2>
+          <Grid2>
+            <Grid2>
+              <Grid2>
+                <Link
+                  rel="noopener noreferrer"
+                  href="https://storage.inrupt.com/d0f9cb3c-2187-4363-86f2-30944951f5ec/profile"
+                  // href={selectedProfileUrl}
+                  target="_blank"
+                >
+                  View your profile here
+                </Link>
+              </Grid2>
+              <Grid2>
+                <Button
+                  size="large"
+                  fullWidth
+                  type="submit"
+                  color="secondary"
+                  variant="contained"
+                >
+                  Save
+                </Button>
+              </Grid2>
+              <Grid2>
+                {showSuccess && (
+                  <Typography>Profile updated successfully!</Typography>
+                )}
+              </Grid2>
+              <Grid2>
+                <Button
+                  size="large"
+                  color="secondary"
+                  variant="contained"
+                  fullWidth
+                  onClick={handleGoBackToProfileSelector}
+                >
+                  Go to Profile Selector
+                </Button>
+              </Grid2>
+            </Grid2>
+          </Grid2>
+        </Grid2>
+        {/* </Grid2> */}
+        <Grid2 className="Divider Grid">
+          <Divider orientation="vertical" />
+        </Grid2>
+        <Grid2 spacing={3} className="New Profile Grid">
+          <NewProfileView />
+        </Grid2>
+      </Grid2>
     </Box>
   );
 };

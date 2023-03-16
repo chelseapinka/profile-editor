@@ -9,6 +9,9 @@ import { SessionProvider } from "@inrupt/solid-ui-react";
 import { theme } from "./theme";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ProfileSelector from "./ProfileSelector";
+import Box from "@mui/material/Box";
+import Header from "./Header";
+
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -17,16 +20,18 @@ root.render(
   <React.StrictMode>
     <SessionProvider>
       <ThemeProvider theme={theme}>
-        <BrowserRouter>
-          <Routes>
-            <Route index element={<App />} />
-            <Route path="/profile-selector" element={<ProfileSelector />} />
-            <Route path="/profile-editor" element={<ProfileEditor />} />
-          </Routes>
-        </BrowserRouter>
+        <Header />
+        <Box m="25px" display="flex" flexDirection="column">
+          <BrowserRouter>
+            <Routes>
+              <Route index element={<App />} />
+              <Route path="/profile-selector" element={<ProfileSelector />} />
+              <Route path="/profile-editor" element={<ProfileEditor />} />
+            </Routes>
+          </BrowserRouter>
+        </Box>
       </ThemeProvider>
     </SessionProvider>
-    {/* <App /> */}
   </React.StrictMode>
 );
 

@@ -3,49 +3,69 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 import NewProfileView from "./NewProfileView";
-import handleLogOut from "./utils/handleLogOut";
-import { Typography } from "@mui/material";
+import { Divider, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 const ProfileSelector = () => {
-  const { profileUrls, setSelectedProfileUrl } = useProfile();
+  const { profileUrls, setSelectedProfileUrl, selectedProfileUrl } =
+    useProfile();
   const navigate = useNavigate();
-
+  console.log({ selectedProfileUrl });
   const handleProfileSelect = (profile: string) => {
     setSelectedProfileUrl(profile);
     navigate("/profile-editor");
   };
 
   return (
-    <Box>
-      <Grid2 container display="flex" direction="row">
-        <Grid2 width={"50%"}>
-          <Typography>Which profile would you like to edit?</Typography>
-          {profileUrls.map((profile: string) => {
-            return (
-              <Button
-                key={profile}
-                size="large"
-                variant="contained"
-                fullWidth
-                onClick={() => handleProfileSelect(profile)}
-              >
-                {profile}
-              </Button>
-            );
-          })}
+    <Box justifyContent="center" display="flex" flexDirection="column">
+      <Grid2 container justifyContent="space-evenly">
+        <Grid2>
+          <Box mx={4} py={3}>
+            <Typography variant="h1" textAlign="center">
+              We found more than one profile for that WebId. Which Profile would
+              you like to edit?
+            </Typography>
+          </Box>
         </Grid2>
-        <Grid2 width={"50%"}>
-          <NewProfileView />
+        <Grid2 container justifyContent="space-evenly" spacing={8}>
+          <Grid2 flexDirection="column" flexGrow={1}>
+            <Grid2>
+              <Typography variant="h4" textAlign="center">
+                Edit an existing profile:
+              </Typography>
+            </Grid2>
+            <Grid2>
+              {profileUrls.map((profile: string) => {
+                return (
+                  <Grid2>
+                    <Button
+                      key={profile}
+                      size="large"
+                      variant="contained"
+                      onClick={() => handleProfileSelect(profile)}
+                    >
+                      {profile}
+                    </Button>
+                  </Grid2>
+                );
+              })}
+            </Grid2>
+          </Grid2>
+          <Grid2>
+            <Divider orientation="vertical" />
+          </Grid2>
+          <Grid2
+            container
+            flexDirection="column"
+            flexGrow={1}
+            justifyContent="space-evenly"
+            spacing={8}
+          >
+            <Grid2>
+              <NewProfileView />
+            </Grid2>
+          </Grid2>
         </Grid2>
-        <Button
-          size="large"
-          variant="contained"
-          fullWidth
-          onClick={() => handleLogOut()}
-        >
-          Log Out
-        </Button>
       </Grid2>
     </Box>
   );

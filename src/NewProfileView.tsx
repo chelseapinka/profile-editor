@@ -13,6 +13,7 @@ import {
   ThingPersisted,
 } from "@inrupt/solid-client";
 import invariant from "tiny-invariant";
+import { Typography } from "@mui/material";
 
 const NewProfileView = () => {
   const { session } = useSession();
@@ -62,25 +63,38 @@ const NewProfileView = () => {
 
   return (
     <Grid2 container direction="column" spacing={4}>
-      <TextField
-        onChange={(e) => setContainerAddress(e.target.value)}
-        value={containerAddress}
-        label="Where do you want to create profile?"
-      />
-      <TextField
-        onChange={(e) => setProfileName(e.target.value)}
-        value={profileName}
-        label="What would you like to call your profile?"
-      />
-      <Button
-        size="large"
-        color="secondary"
-        variant="contained"
-        fullWidth
-        onClick={handleNewProfile}
-      >
-        Create a new Profile
-      </Button>
+      <Grid2>
+        <Typography textAlign="center" variant="h4">
+          I want to create a new profile
+        </Typography>
+      </Grid2>
+      <Grid2>
+        <TextField
+          onChange={(e) => setContainerAddress(e.target.value)}
+          value={containerAddress}
+          label="Where do you want to create profile?"
+          fullWidth
+        />
+      </Grid2>
+      <Grid2>
+        <TextField
+          onChange={(e) => setProfileName(e.target.value)}
+          value={profileName}
+          label="What would you like to call your profile?"
+          fullWidth
+        />
+      </Grid2>
+      <Grid2>
+        <Button
+          size="large"
+          color="secondary"
+          variant="contained"
+          fullWidth
+          onClick={handleNewProfile}
+        >
+          Create
+        </Button>
+      </Grid2>
     </Grid2>
   );
 };

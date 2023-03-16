@@ -6,6 +6,9 @@ import { ILoginInputOptions } from "@inrupt/solid-client-authn-core";
 import { Typography } from "@mui/material";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 import { getIdpsFromWebId } from "./utils/getIdpsFromWebId";
+import { Box } from "@mui/system";
+import Divider from "@mui/material/Divider";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 const LoggedOutView = () => {
   const { session } = useSession();
@@ -32,11 +35,16 @@ const LoggedOutView = () => {
     if (idpsFromWebIdProfile.length) {
       let buttons: ReactElement[] = idpsFromWebIdProfile.map((idp) => {
         return (
-          <Button
-            onClick={() => handleLogin(idp)}
-            variant="contained"
-            key={idp}
-          >{`Login with ${idp}`}</Button>
+          <Box my={2}>
+            <Button
+              onClick={() => handleLogin(idp)}
+              variant="contained"
+              key={idp}
+            >
+              {`Login with ${idp}`}
+              <ArrowForwardIcon sx={{ pl: "5px" }} />
+            </Button>
+          </Box>
         );
       });
       return <div>{buttons}</div>;
@@ -51,35 +59,60 @@ const LoggedOutView = () => {
   };
 
   return (
-    <Grid2 container direction="column" spacing={4}>
-      <Typography>Have a WebID? </Typography>
-      <Button
-        onClick={() => handleLogin("https://login.inrupt.com")}
-        variant="contained"
-      >
-        Sign In with PodSpaces
-      </Button>
-      <Typography>Or enter your WebID to Sign into another server</Typography>
-      <TextField
-        variant="standard"
-        onChange={(e) => {
-          setWebIdInput(e.target.value);
-        }}
-        value={webIdInput}
-      />
+    <Box justifyContent="center">
+      <Box mx={4} py={3}>
+        <Typography variant="h1" textAlign="center">
+          Welcome to the profile editor. Please log in to continue editing your
+          profiles.
+        </Typography>
+      </Box>
+      <Grid2 container justifyContent="space-evenly" spacing={8}>
+        <Grid2 flexDirection="column">
+          <Grid2>
+            <Typography variant="h4">Have a WebID with PodSpaces? </Typography>
+          </Grid2>
 
-      <Button
-        onClick={async () => {
-          const idps = (await getIdpsFromWebId(webIdInput)) || [];
-          setLoginWithWebID(true);
-          setIdpsFromWebIdProfile(idps);
-        }}
-        variant="contained"
-      >
-        Get IDP from WebID Profile
-      </Button>
-      {renderIdpOptions()}
-    </Grid2>
+          <Button
+            onClick={() => handleLogin("https://login.inrupt.com")}
+            variant="contained"
+            fullWidth
+          >
+            Sign In with PodSpaces
+          </Button>
+        </Grid2>
+        <Grid2>
+          <Divider orientation="vertical" />
+        </Grid2>
+
+        <Grid2 flexDirection="column">
+          <Grid2>
+            <Typography variant="h4">Or enter your WebID</Typography>
+          </Grid2>
+          <TextField
+            variant="standard"
+            onChange={(e) => {
+              setWebIdInput(e.target.value);
+            }}
+            value={webIdInput}
+            fullWidth
+          />
+          <Grid2>
+            <Button
+              onClick={async () => {
+                const idps = (await getIdpsFromWebId(webIdInput)) || [];
+                setLoginWithWebID(true);
+                setIdpsFromWebIdProfile(idps);
+              }}
+              variant="contained"
+              fullWidth
+            >
+              Get IDP from WebID Profile
+            </Button>
+          </Grid2>
+          {renderIdpOptions()}
+        </Grid2>
+      </Grid2>
+    </Box>
   );
 };
 

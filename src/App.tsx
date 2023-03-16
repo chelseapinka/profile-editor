@@ -1,4 +1,3 @@
-import "./App.css";
 import { useSession } from "@inrupt/solid-ui-react";
 import { Navigate } from "react-router-dom";
 import useProfile from "./hooks/useProfile";
@@ -10,17 +9,16 @@ function App() {
 
   if (
     session.info.isLoggedIn &&
-    profileUrls &&
     profileUrls.length > 1 &&
     !selectedProfileUrl
   ) {
-    return <Navigate to="/profile-selector" replace={true} />;
+    return <Navigate to="/profile-selector" />;
   }
   if (
     (session.info.isLoggedIn && profileUrls && profileUrls.length === 1) ||
     (session.info.isLoggedIn && selectedProfileUrl)
   ) {
-    return <Navigate to="/profile-editor" replace={true} />;
+    return <Navigate to="/profile-editor" />;
   }
   return <LoggedOutView />;
 }
