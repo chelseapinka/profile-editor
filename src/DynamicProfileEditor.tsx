@@ -11,10 +11,12 @@ import {
   getSolidDataset,
   getThing,
   getThingAll,
+  getUrl,
   SolidDataset,
   Thing,
 } from "@inrupt/solid-client";
 import { greedyGetDataFromThing } from "./utils/greedyGetDataFromThing";
+import invariant from "tiny-invariant";
 
 const DynamicProfileEditor = () => {
   const { session } = useSession();
@@ -32,6 +34,7 @@ const DynamicProfileEditor = () => {
 
   const handleSave = () => {
     console.log("save profile");
+    setShowSuccess(true);
   };
 
   const selectedProfileUrl =
@@ -41,10 +44,9 @@ const DynamicProfileEditor = () => {
     const dataset = await getSolidDataset(selectedProfileUrl, {
       fetch: session.fetch,
     });
-    console.log({ dataset });
+
     if (session.info.webId) {
       const things = await getThingAll(dataset);
-      console.log({ things });
       setProfileThings(things);
     }
     setProfileDataset(dataset);
@@ -56,10 +58,17 @@ const DynamicProfileEditor = () => {
     }
   }, [session]);
 
+  useEffect(() => {
+    if (showSuccess) {
+      setTimeout(() => setShowSuccess(false), 4000);
+    }
+  }, [showSuccess]);
+
   const renderProfileForm = () => {
     return profileThings.map((thing, i) => {
-      // we need to use this function because we don't know what type of data each field is
       console.log({ thing });
+      // it would be great to have a function that could return the properties on a thing so we could then dynamically get them
+      // we need to use this function because we don't know what type of data each field is
       const label =
         greedyGetDataFromThing(
           thing,
@@ -69,7 +78,7 @@ const DynamicProfileEditor = () => {
         <Grid2 key={i}>
           <TextField
             variant="filled"
-            //   defaultValue={}
+            defaultValue=""
             name=""
             fullWidth
             label={label}
