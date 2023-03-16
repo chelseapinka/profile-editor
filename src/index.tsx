@@ -11,6 +11,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ProfileSelector from "./ProfileSelector";
 import Box from "@mui/material/Box";
 import Header from "./Header";
+import DynamicProfileEditor from "./DynamicProfileEditor";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -26,7 +27,10 @@ root.render(
             <Routes>
               <Route index element={<App />} />
               <Route path="/profile-selector" element={<ProfileSelector />} />
-              <Route path="/profile-editor" element={<ProfileEditor />} />
+              <Route
+                path="/profile-editor"
+                element={<DynamicProfileEditor />}
+              />
             </Routes>
           </BrowserRouter>
         </Box>
