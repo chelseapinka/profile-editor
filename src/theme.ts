@@ -3,7 +3,6 @@ import { createTheme } from "@mui/material/styles";
 declare module "@mui/material/styles" {
   interface PaletteOptions {
     appBackground: React.CSSProperties["color"];
-    chiclet: React.CSSProperties["color"];
   }
 }
 
@@ -80,7 +79,7 @@ export const theme = createTheme({
   },
   palette: {
     appBackground: "#F2F2F2",
-    chiclet: "#FFFFFF",
+
     primary: {
       main: "#0D6796",
     },
